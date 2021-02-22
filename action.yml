@@ -1,4 +1,4 @@
-name: 'pulse'
+name: 'rootly-pulse'
 description: 'Create a new rootly pulse'
 branding:
   icon: 'alert-triangle'
