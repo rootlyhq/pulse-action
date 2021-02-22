@@ -1,0 +1,21 @@
+name: 'pulse'
+description: 'Create a new rootly pulse'
+branding:
+  icon: 'alert-triangle'
+  color: 'green'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+inputs:
+  summary:
+    description: Summary of the pulse
+    required: true
+  api-key:
+    description: A api key for rootly
+    required: true
+  environment:
+    description: Environments associated with the pulse. CSV value.
+    required: false
+  service:
+    description: Services associated with the pulse. CSV value.
+    required: false
