@@ -1,3 +1,3 @@
-# cli-action
+# pulse-action
 
-GitHub action for the rootly cli
+GitHub action for sending a rootly pulse
