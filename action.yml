@@ -13,12 +13,12 @@ inputs:
   api_key:
     description: A api key for rootly
     required: true
-  environment:
-    description: Environments associated with the pulse. CSV value so no spaces before or after ,
+  environments:
+    description: Environments associated with the pulse. Separate with commas.
     required: false
-  service:
-    description: Services associated with the pulse. CSV value so no spaces before or after ,
+  services:
+    description: Services associated with the pulse. Separate with commas.
     required: false
-  label:
-    description: Labels associated with the pule CSV value with key value pairs being separated with a =. No spaces before or after = and ,
+  labels:
+    description: Labels associated with the pulse. Separate with commas and separate key value pair with = (no spaces before or after =).
     required: false
