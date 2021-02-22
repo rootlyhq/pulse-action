@@ -10,7 +10,7 @@ inputs:
   summary:
     description: Summary of the pulse
     required: true
-  api-key:
+  api_key:
     description: A api key for rootly
     required: true
   environment:
