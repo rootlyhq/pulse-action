@@ -21,8 +21,8 @@
 | summary        | Summary of the pulse                                                                                                     | Yes          |
 | api_key        | A api key for rootly                                                                                                     | Yes          |
 | services       | Services associated with the pulse. Separate with commas.                                                                | No           |
-| labels         | Labels associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =). | No           |
 | environments   | Environments associated with the pulse. Separate with commas.                                                            | No           |
+| labels         | Labels associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =). | No           |
 
 ## ⚙️ Example
 
@@ -43,4 +43,6 @@ jobs:
           api_key: ${{ secrets.ROOTLY_API_KEY }}
           summary: Deploy Website
           environments: production
+          services: elasticsearch-prod
+          labels: platform=osx,version=2
 ```
