@@ -20,5 +20,5 @@ inputs:
     description: Services associated with the pulse. Separate with commas.
     required: false
   labels:
-    description: Labels associated with the pulse. Separate with commas and separate key value pair with = (no spaces before or after =).
+    description: Labels associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =).
     required: false
