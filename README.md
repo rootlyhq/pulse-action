@@ -19,10 +19,12 @@
 | **Input Name** | **Description**                                                                                                          | **Required** |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------ |
 | summary        | Summary of the pulse                                                                                                     | Yes          |
-| api_key        | A api key for rootly                                                                                                     | Yes          |
+| api_key        | A API key for rootly                                                                                                     | Yes          |
 | services       | Services associated with the pulse. Separate with commas.                                                                | No           |
 | environments   | Environments associated with the pulse. Separate with commas.                                                            | No           |
 | labels         | Labels associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =). | No           |
+| source         | Source of the pulse                                                                                                      | No           |
+| refs           | Refs associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =).   | No           |
 
 ## ⚙️ Example
 
@@ -42,7 +44,9 @@ jobs:
         with:
           api_key: ${{ secrets.ROOTLY_API_KEY }}
           summary: Deploy Website
-          environments: production
-          services: elasticsearch-prod
-          labels: platform=osx,version=2
+          environments: production # Not required
+          services: elasticsearch-prod # Not required
+          labels: platform=ubuntu,version=2 # Not required
+          source: k8s # Not required
+          refs: sha=cd62148cbc5eb42168fe99fdb50a364e12b206ac, image=registry.rootly.io/rootly/my-service:cd6214 # Not required
 ```
