@@ -3,10 +3,10 @@
 
   <h1>pulse-action</h1>
 
-  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/rootly-io/pulse-action">
+  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/rootlyhq/pulse-action">
   <br>
-  <img alt="build" src="https://github.com/rootly-io/pulse-action/workflows/build/badge.svg" />
-  <img alt="lint" src="https://github.com/rootly-io/pulse-action/workflows/lint/badge.svg" />
+  <img alt="build" src="https://github.com/rootlyhq/pulse-action/workflows/build/badge.svg" />
+  <img alt="lint" src="https://github.com/rootlyhq/pulse-action/workflows/lint/badge.svg" />
   <br />
   <br />
   <i>A GitHub action for sending a rootly pulse</i>
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: make deploy
       - name: rootly-pulse
-        uses: rootly-io/pulse-action@main
+        uses: rootlyhq/pulse-action@main
         with:
           api_key: ${{ secrets.ROOTLY_API_KEY }}
           summary: Deploy Website
