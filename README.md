@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: make deploy
       - name: rootly-pulse
-        uses: rootlyhq/pulse-action@main
+        uses: rootlyhq/pulse-action@master
         with:
           api_key: ${{ secrets.ROOTLY_API_KEY }}
           summary: Deploy Website
