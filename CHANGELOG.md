@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [2.0.0] - 2026-02-18
 
 ### Changed
 
@@ -9,6 +9,8 @@
 - Added `entrypoint.sh` to map GitHub Action inputs to `rootly-cli` flags
 - Command invocation changed from `rootly pulse <summary>` to `rootly pulse create <summary>`
 - Environment variable renamed from `ROOTLY_API_TOKEN` to `ROOTLY_API_KEY`
+- Base image switched to `alpine:latest`
+- Resolved hadolint warnings (DL3018, DL4006)
 
 ## [1.2.0] - 2024-10-21
 

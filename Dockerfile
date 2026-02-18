@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM alpine:3.21
+FROM alpine:latest
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache curl
