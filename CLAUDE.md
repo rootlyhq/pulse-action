@@ -4,13 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a GitHub Action (`rootlyhq/pulse-action`) that sends pulses to Rootly. It wraps the `rootlyhub/cli` Docker image and invokes the `rootly pulse` command.
+This is a GitHub Action (`rootlyhq/pulse-action`) that sends pulses to Rootly. It installs `rootly-cli` from GitHub releases and invokes `rootly pulse create`.
 
 ## Architecture
 
-- **Docker-based GitHub Action**: Uses `rootlyhub/cli:latest` as the base image
+- **Docker-based GitHub Action**: Installs `rootly-cli` from `rootlyhq/rootly-cli` releases
 - **action.yml**: Defines inputs (summary, api_key, environments, services, labels, source, refs)
-- **Dockerfile**: Minimal - just sets the CLI image and runs `rootly pulse`
+- **Dockerfile**: Alpine-based, downloads rootly-cli binary
+- **entrypoint.sh**: Maps GitHub Action `INPUT_*` env vars to rootly-cli flags
 
 ## Build & Lint Commands
 

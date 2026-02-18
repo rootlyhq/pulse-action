@@ -9,24 +9,26 @@
   <img alt="lint" src="https://github.com/rootlyhq/pulse-action/workflows/lint/badge.svg" />
   <br />
   <br />
-  <i>A GitHub action for sending a rootly pulse</i>
+  <i>A GitHub Action for sending a Rootly pulse</i>
 </div>
 
 <hr />
 
-## 🔢 Inputs
+Powered by [rootly-cli](https://github.com/rootlyhq/rootly-cli).
+
+## Inputs
 
 | **Input Name** | **Description**                                                                                                          | **Required** |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------ |
 | summary        | Summary of the pulse                                                                                                     | Yes          |
-| api_key        | A API key for rootly                                                                                                     | Yes          |
+| api_key        | Rootly API key                                                                                                           | Yes          |
 | services       | Services associated with the pulse. Separate with commas.                                                                | No           |
 | environments   | Environments associated with the pulse. Separate with commas.                                                            | No           |
 | labels         | Labels associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =). | No           |
 | source         | Source of the pulse                                                                                                      | No           |
 | refs           | Refs associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =).   | No           |
 
-## ⚙️ Example
+## Example
 
 ```yaml
 name: Deploy Website
@@ -37,7 +39,7 @@ jobs:
   pulse:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: make deploy
       - name: rootly-pulse
         uses: rootlyhq/pulse-action@master
@@ -48,5 +50,5 @@ jobs:
           services: elasticsearch-prod # Not required
           labels: platform=ubuntu,version=2 # Not required
           source: k8s # Not required
-          refs: sha=cd62148cbc5eb42168fe99fdb50a364e12b206ac, image=registry.rootly.io/rootly/my-service:cd6214 # Not required
+          refs: sha=${{ github.sha }} # Not required
 ```

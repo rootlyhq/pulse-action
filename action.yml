@@ -1,5 +1,5 @@
 name: 'rootly-pulse'
-description: 'Create a new rootly pulse'
+description: 'Send a deployment or event pulse to Rootly'
 branding:
   icon: 'alert-triangle'
   color: 'green'
@@ -11,7 +11,7 @@ inputs:
     description: Summary of the pulse
     required: true
   api_key:
-    description: A API key for rootly
+    description: Rootly API key
     required: true
   environments:
     description: Environments associated with the pulse. Separate with commas.
@@ -27,3 +27,4 @@ inputs:
     required: false
   refs:
     description: Refs associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =).
+    required: false
