@@ -1,7 +1,10 @@
 # hadolint ignore=DL3007
 FROM alpine:3.21
 
+# hadolint ignore=DL3018
 RUN apk add --no-cache curl
+
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Install rootly-cli from GitHub releases
 ARG ROOTLY_CLI_VERSION=latest
