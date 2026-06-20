@@ -39,7 +39,7 @@ jobs:
   pulse:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: make deploy
       - name: rootly-pulse
         uses: rootlyhq/pulse-action@master
