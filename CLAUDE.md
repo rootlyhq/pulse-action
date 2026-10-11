@@ -8,22 +8,27 @@ This is a GitHub Action (`rootlyhq/pulse-action`) that sends pulses to Rootly. I
 
 ## Architecture
 
-- **Docker-based GitHub Action**: Installs `rootly-cli` from `rootlyhq/rootly-cli` releases
-- **action.yml**: Defines inputs (summary, api_key, environments, services, labels, source, refs)
-- **Dockerfile**: Alpine-based, downloads rootly-cli binary
-- **entrypoint.sh**: Maps GitHub Action `INPUT_*` env vars to rootly-cli flags
+- **Composite GitHub Action**: runs on Linux, macOS, and Windows runners (x64/arm64)
+- **action.yml**: Defines inputs (summary, api_key, environments, services, labels, source, refs, api_host, version), outputs (pulse_id, cli_version), and the two steps below
+- **scripts/install.sh**: Downloads the `rootly-cli` archive for `RUNNER_OS`/`RUNNER_ARCH`, verifies it against `checksums.txt`, and adds it to `GITHUB_PATH`
+- **scripts/pulse.sh**: Maps `INPUT_*` env vars to `rootly pulse create` flags and writes `pulse_id` to `GITHUB_OUTPUT`
+- Inputs are passed to scripts via `env:`, never interpolated with `${{ }}` inside `run:`, to avoid script injection
 
-## Build & Lint Commands
+The default `rootly-cli` version lives in `action.yml` (`inputs.version.default`). Dependabot does not bump it; update it by hand.
+
+## Lint & Test Commands
 
 ```bash
-# Build the Docker image locally
-docker build .
+shellcheck scripts/*.sh
+go run github.com/rhysd/actionlint/cmd/actionlint@latest
 
-# Lint the Dockerfile (uses hadolint)
-# CI runs: brpaz/hadolint-action@master
+# Install the CLI locally the way the action does
+RUNNER_OS=macOS RUNNER_ARCH=ARM64 RUNNER_TEMP=$(mktemp -d) ROOTLY_CLI_VERSION=0.6.0 bash scripts/install.sh
 ```
 
 ## CI Workflows
 
-- **build.yml**: Runs `docker build .` on every push
-- **lint.yml**: Runs hadolint on the Dockerfile on every push
+- **ci.yml**: actionlint + shellcheck, then runs the action end to end on ubuntu (x64/arm64), macOS, and Windows against `test/stub_server.py`, and checks the request body and outputs
+- **release.yml**: On release publish, moves the major tag (e.g. `v3`) to the release commit
+
+All third-party actions are pinned to full commit SHAs.

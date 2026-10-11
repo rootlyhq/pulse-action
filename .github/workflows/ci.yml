@@ -1,0 +1,91 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: actionlint
+        uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
+      - name: shellcheck
+        run: shellcheck scripts/*.sh
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Start stub Rootly API
+        run: |
+          python test/stub_server.py "${RUNNER_TEMP}/body.json" 8765 &
+          for _ in $(seq 1 20); do
+            curl -s -o /dev/null http://127.0.0.1:8765 && exit 0
+            sleep 0.5
+          done
+          echo "stub server did not start" >&2
+          exit 1
+
+      - name: Run action
+        id: pulse
+        uses: ./
+        with:
+          api_key: test-key
+          api_host: http://127.0.0.1:8765
+          summary: Deploy "$(whoami)" `id`
+          environments: production
+          services: api
+          labels: platform=${{ runner.os }},version=2
+          source: github
+          refs: sha=${{ github.sha }}
+
+      - name: Verify request and outputs
+        env:
+          PULSE_ID: ${{ steps.pulse.outputs.pulse_id }}
+          CLI_VERSION: ${{ steps.pulse.outputs.cli_version }}
+        run: |
+          set -euo pipefail
+          body="${RUNNER_TEMP}/body.json"
+          cat "${body}"
+          test "${PULSE_ID}" = "pulse-123"
+          test -n "${CLI_VERSION}"
+          jq -e '.data.attributes.summary == "Deploy \"$(whoami)\" `id`"' "${body}"
+          jq -e '.data.attributes.source == "github"' "${body}"
+          jq -e '.data.attributes.environment_ids == ["production"]' "${body}"
+          jq -e '.data.attributes.service_ids == ["api"]' "${body}"
+          jq -e '.data.attributes.labels.version == "2"' "${body}"
+          jq -e --arg sha "${GITHUB_SHA}" '.data.attributes.refs == [{"name": "sha", "value": $sha}]' "${body}"
+
+  test-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install latest rootly-cli
+        env:
+          ROOTLY_CLI_VERSION: latest
+        run: bash scripts/install.sh
+      - run: rootly pulse create --help

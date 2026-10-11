@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.0.0] - Unreleased
+
+### Changed
+
+- Converted from a Docker action to a composite action; removed `Dockerfile` and `entrypoint.sh`
+- Runs on Linux, macOS, and Windows runners, on both x64 and arm64 (Windows x64 only)
+- `rootly-cli` is pinned to `0.6.0` by default instead of always installing the latest release
+- Downloaded `rootly-cli` archives are verified against the release `checksums.txt`
+- Replaced `build` and `lint` workflows with a single `ci` workflow (actionlint, shellcheck, end-to-end test on every runner OS against a stub API)
+- Dependabot no longer tracks Docker images
+
+### Added
+
+- `version` input to choose the `rootly-cli` version (or `latest`)
+- `api_host` input to target a non-default Rootly API host
+- `pulse_id` and `cli_version` outputs
+- `release` workflow that moves the major version tag (e.g. `v3`) when a release is published
+
 ## [2.0.0] - 2026-02-18
 
 ### Changed
