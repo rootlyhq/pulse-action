@@ -8,8 +8,8 @@
 - Runs on Linux, macOS, and Windows runners, on both x64 and arm64 (Windows x64 only)
 - `rootly-cli` is pinned to `0.6.0` by default instead of always installing the latest release
 - Downloaded `rootly-cli` archives are verified against the release `checksums.txt`
-- Replaced `build` and `lint` workflows with a single `ci` workflow (actionlint, shellcheck, end-to-end test on every runner OS against a stub API)
-- Dependabot no longer tracks Docker images
+- Replaced `build` and `lint` workflows with a single `ci` workflow (actionlint, zizmor, shellcheck, end-to-end test on every runner OS against a stub API)
+- Dependabot no longer tracks Docker images; cooldown raised to 7 days
 
 ### Added
 
