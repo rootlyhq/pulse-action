@@ -1,0 +1,32 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+permissions: {}
+
+jobs:
+  major-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # move the major version tag
+    steps:
+      - name: Move major version tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          if [[ ! "${TAG}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Skipping non-semver tag ${TAG}"
+            exit 0
+          fi
+          major="${TAG%%.*}"
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${major}" >/dev/null 2>&1; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/git/refs/tags/${major}" \
+              -f sha="${GITHUB_SHA}" -F force=true
+          else
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref="refs/tags/${major}" -f sha="${GITHUB_SHA}"
+          fi

@@ -1,11 +1,9 @@
 name: 'rootly-pulse'
 description: 'Send a deployment or event pulse to Rootly'
+author: 'Rootly'
 branding:
   icon: 'alert-triangle'
   color: 'green'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
 inputs:
   summary:
     description: Summary of the pulse
@@ -28,3 +26,39 @@ inputs:
   refs:
     description: Refs associated with the pulse. Separate with commas and separate key-value pair with = (no spaces before or after =).
     required: false
+  api_host:
+    description: Rootly API host. Defaults to api.rootly.com.
+    required: false
+  version:
+    description: rootly-cli version to install (e.g. 0.6.0), or "latest".
+    required: false
+    default: '0.6.0'
+outputs:
+  pulse_id:
+    description: ID of the created pulse
+    value: ${{ steps.pulse.outputs.pulse_id }}
+  cli_version:
+    description: Installed rootly-cli version
+    value: ${{ steps.install.outputs.version }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Install rootly-cli
+      id: install
+      shell: bash
+      env:
+        ROOTLY_CLI_VERSION: ${{ inputs.version }}
+      run: bash "${GITHUB_ACTION_PATH}/scripts/install.sh"
+    - name: Send pulse
+      id: pulse
+      shell: bash
+      env:
+        INPUT_SUMMARY: ${{ inputs.summary }}
+        INPUT_API_KEY: ${{ inputs.api_key }}
+        INPUT_ENVIRONMENTS: ${{ inputs.environments }}
+        INPUT_SERVICES: ${{ inputs.services }}
+        INPUT_LABELS: ${{ inputs.labels }}
+        INPUT_SOURCE: ${{ inputs.source }}
+        INPUT_REFS: ${{ inputs.refs }}
+        INPUT_API_HOST: ${{ inputs.api_host }}
+      run: bash "${GITHUB_ACTION_PATH}/scripts/pulse.sh"
